@@ -1,0 +1,27 @@
+# Android / Gradle
+MapDistance/.gradle/
+MapDistance/**/build/
+MapDistance/local.properties
+*.apk
+*.aab
+*.ap_
+*.dex
+.cxx/
+*.iml
+.idea/
+
+# Runtime / personal
+.claude/
+.cursor/
+shots/
+*.log
+.DS_Store
+Thumbs.db
+
+# Local helper script (not in this repo)
+tools/feishu_send.py
+
+# Local full notes / version history (not on GitHub)
+README.local.md
+README.LOCAL.md
+版本记录.md

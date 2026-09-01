@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"/>
+<link rel="stylesheet" href="leaflet.css"/>
+<style>
+html, body, #map { margin: 0; height: 100%; width: 100%; background: #e2e8f0; }
+.leaflet-control-attribution { font-size: 10px; }
+.leaflet-top.leaflet-left { margin-top: 52px; }
+html.hist .leaflet-top.leaflet-left { margin-top: 10px; }
+.offline-hint {
+  position: absolute; left: 10px; bottom: 10px; z-index: 500;
+  background: #0F172A; color: #fff; font-size: 12px;
+  padding: 4px 10px; border-radius: 12px; display: none;
+}
+.mark-num { background: none !important; border: none !important; }
+.mark-bubble {
+  width: 24px; height: 24px; border-radius: 12px;
+  background: #F59E0B; color: #fff;
+  font: 700 12px/20px sans-serif;
+  text-align: center;
+  border: 2px solid #fff;
+  box-shadow: 0 1px 4px rgba(0,0,0,.35);
+}
+.mark-auto {
+  background: #0F766E;
+  border-radius: 4px;
+}
+.dir-wrap { background: none !important; border: none !important; }
+.dir-arrow {
+  width: 0; height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-bottom: 14px solid #0369A1;
+  filter: drop-shadow(0 1px 1px rgba(255,255,255,.9));
+}
+.edit-hint {
+  position: absolute; left: 10px; top: 10px; z-index: 500;
+  background: #0F172A; color: #fff; font-size: 12px;
+  padding: 4px 10px; border-radius: 12px; display: none;
+}
+.span-hint {
+  position: absolute; left: 50%; top: 10px; z-index: 500;
+  transform: translateX(-50%);
+  background: #0F172A; color: #fff; font-size: 12px;
+  padding: 4px 10px; border-radius: 12px; display: none;
+}
+.span-pin {
+  width: 22px; height: 22px; border-radius: 11px;
+  color: #fff; font: 700 11px/18px sans-serif;
+  text-align: center; border: 2px solid #fff;
+  box-shadow: 0 1px 4px rgba(0,0,0,.35);
+}
+.hop-wrap { background: none !important; border: none !important; }
+.hop-dot {
+  width: 22px; height: 22px; border-radius: 11px;
+  background: #DC2626; color: #fff;
+  font: 700 11px/18px sans-serif;
+  text-align: center;
+  border: 2px solid #fff;
+  box-shadow: 0 1px 3px rgba(0,0,0,.35);
+}
+.hop-dot.hid { background: #94A3B8; }
+.hop-dot.sel {
+  background: #F59E0B;
+  width: 26px; height: 26px; border-radius: 13px;
+  font: 700 12px/22px sans-serif;
+  border-width: 3px;
+}
+</style>
+</head>
+<body>
+<div id="map"></div>
+<div id="offlineHint" class="offline-hint">离线轨迹 · 联网后补地图</div>
+<div id="editHint" class="edit-hint">可放大到更近再点 · 红点编号和列表一致 · 去掉/恢复后地图不挪</div>
+<div id="spanHint" class="span-hint">先点起点，再点终点 · 可点打点或轨迹</div>
+<script src="leaflet.js"></script>
+<script>
+var follow = true;
+var map, line, me, tile, sat, markLayer, arrowLayer, dotLayer, trackLayer, spanLayer;
+var path = [];
+var pathSegs = [];
+var colorSegs = [];
+var arrowAcc = 0;
+var editPts = false;
+var spanPick = false;
+var lastDotsJson = "[]";
+
+function boot() {
+  initLeaflet();
+}
+
+function ready() {
+  try { Android.onMapReady("leaflet"); } catch (e) {}
+  try { onNet(Android.isOnline()); } catch (e) { onNet(true); }
+}
+
+function initLeaflet() {
+  map = L.map("map", {
+    zoomControl: true,
+    attributionControl: true,
+    minZoom: 3,
+    maxZoom: 22,
+    zoomSnap: 0.25,
+    zoomDelta: 0.5,
+    wheelPxPerZoomLevel: 60
+  }).setView([30.274, 120.155], 17);
+  tile = L.tileLayer(
+    "https://webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=8&x={x}&y={y}&z={z}",
+    { subdomains: "1234", maxZoom: 22, maxNativeZoom: 18, attribution: "&copy; 高德地图", errorTileUrl: "" }
+  ).addTo(map);
+  sat = L.tileLayer(
+    "https://webst0{s}.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}",
+    { subdomains: "1234", maxZoom: 22, maxNativeZoom: 18, attribution: "&copy; 高德地图" }
+  );
+  line = L.polyline([], { color: "#0EA5E9", weight: 5, opacity: 0.95 });
+  trackLayer = L.layerGroup().addTo(map);
+  trackLayer.addLayer(line);
+  me = L.circleMarker([30.274, 120.155], {
+    radius: 8, color: "#fff", weight: 2, fillColor: "#0EA5E9", fillOpacity: 1
+  }).addTo(map);
+  markLayer = L.layerGroup().addTo(map);
+  arrowLayer = L.layerGroup().addTo(map);
+  dotLayer = L.layerGroup().addTo(map);
+  spanLayer = L.layerGroup().addTo(map);
+  map.on("dragstart", function () {
+    follow = false;
+    try { Android.onFollow(false); } catch (e) {}
+  });
+  map.on("click", function (e) {
+    if ((!editPts && !spanPick) || !e || !e.latlng) return;
+    try { Android.onMapTap(e.latlng.lat, e.latlng.lng, map.getZoom()); } catch (x) {}
+  });
+  map.on("zoomend", function () {
+    refreshArrows();
+    if (editPts && lastDotsJson && lastDotsJson !== "[]") {
+      drawDots(lastDotsJson);
+    }
+  });
+  ready();
+}
+
+function onNet(online) {
+  var hint = document.getElementById("offlineHint");
+  if (hint) hint.style.display = online ? "none" : "block";
+  if (tile) tile.redraw();
+  if (sat && map && map.hasLayer(sat)) sat.redraw();
+  if (map) map.invalidateSize();
+}
+
+function setCenter(lat, lng, force) {
+  if (!map) return;
+  if (force || follow) map.setView([lat, lng], Math.max(map.getZoom(), 16));
+  me.setLatLng([lat, lng]);
+}
+
+function kindColor(k) {
+  k = k | 0;
+  if (k === 1) return "#0F766E";
+  if (k === 2) return "#D97706";
+  return "#0EA5E9";
+}
+
+function resetTrack() {
+  if (trackLayer) trackLayer.clearLayers();
+  colorSegs = [];
+  path = [];
+  pathSegs = [];
+  arrowAcc = 0;
+  if (line) line.setLatLngs([]);
+}
+
+function appendKindPt(ll, kind, forceNew) {
+  kind = kind | 0;
+  var last = colorSegs.length ? colorSegs[colorSegs.length - 1] : null;
+  if (forceNew || !last || last.kind !== kind) {
+    var pl = L.polyline([ll], { color: kindColor(kind), weight: 5, opacity: 0.95 });
+    pl.on("click", function (e) {
+      if ((!editPts && !spanPick) || !e || !e.latlng) return;
+      L.DomEvent.stop(e);
+      try { Android.onMapTap(e.latlng.lat, e.latlng.lng, map.getZoom()); } catch (x) {}
+    });
+    if (trackLayer) trackLayer.addLayer(pl);
+    colorSegs.push({ kind: kind, line: pl });
+    pathSegs.push([ll]);
+  } else {
+    last.line.addLatLng(ll);
+    pathSegs[pathSegs.length - 1].push(ll);
+  }
+  path.push(ll);
+}
+
+function addPoint(lat, lng, kind) {
+  var prev = path.length ? path[path.length - 1] : null;
+  var ll = [lat, lng];
+  appendKindPt(ll, kind, false);
+  me.setLatLng(ll);
+  if (follow) map.panTo(ll);
+  if (prev) {
+    arrowAcc += distM(prev, ll);
+    if (arrowAcc >= arrowGap()) {
+      arrowAcc = 0;
+      addArrow(prev, ll);
+    }
+  }
+}
+
+function setPath(json) {
+  var pts = [];
+  try { pts = JSON.parse(json); } catch (e) { pts = []; }
+  var segs;
+  if (pts.length && Object.prototype.toString.call(pts[0]) === "[object Array]") {
+    segs = pts;
+  } else {
+    segs = [pts];
+  }
+  resetTrack();
+  for (var s = 0; s < segs.length; s++) {
+    var src = segs[s] || [];
+    var first = true;
+    for (var i = 0; i < src.length; i++) {
+      var ll = [src[i].a, src[i].n];
+      appendKindPt(ll, src[i].k, first);
+      first = false;
+    }
+  }
+  if (path.length) {
+    me.setLatLng(path[path.length - 1]);
+    if (!editPts && trackLayer) {
+      try {
+        map.fitBounds(trackLayer.getBounds(), { padding: [48, 48] });
+      } catch (e) {}
+    }
+  }
+  refreshArrows();
+}
+
+function clearPath() {
+  resetTrack();
+  if (arrowLayer) arrowLayer.clearLayers();
+}
+
+function distM(a, b) {
+  var r = 6371000;
+  var p1 = a[0] * Math.PI / 180, p2 = b[0] * Math.PI / 180;
+  var dlat = p2 - p1, dlng = (b[1] - a[1]) * Math.PI / 180;
+  var h = Math.sin(dlat / 2) * Math.sin(dlat / 2)
+        + Math.cos(p1) * Math.cos(p2) * Math.sin(dlng / 2) * Math.sin(dlng / 2);
+  return 2 * r * Math.asin(Math.min(1, Math.sqrt(h)));
+}
+
+function bearingDeg(a, b) {
+  var lat1 = a[0] * Math.PI / 180, lat2 = b[0] * Math.PI / 180;
+  var dlng = (b[1] - a[1]) * Math.PI / 180;
+  var y = Math.sin(dlng) * Math.cos(lat2);
+  var x = Math.cos(lat1) * Math.sin(lat2) - Math.sin(lat1) * Math.cos(lat2) * Math.cos(dlng);
+  return (Math.atan2(y, x) * 180 / Math.PI + 360) % 360;
+}
+
+function arrowGap() {
+  var z = map ? map.getZoom() : 16;
+  if (z >= 17) return 28;
+  if (z >= 16) return 45;
+  if (z >= 15) return 70;
+  return 110;
+}
+
+function addArrow(from, to) {
+  if (!arrowLayer || !from || !to) return;
+  if (distM(from, to) < 4) return;
+  var brg = bearingDeg(from, to);
+  var icon = L.divIcon({
+    className: "dir-wrap",
+    html: '<div class="dir-arrow" style="transform:rotate(' + brg + 'deg)"></div>',
+    iconSize: [12, 14],
+    iconAnchor: [6, 7]
+  });
+  L.marker(to, { icon: icon, interactive: false, keyboard: false, zIndexOffset: 350 })
+    .addTo(arrowLayer);
+}
+
+function refreshArrows() {
+  if (!arrowLayer) return;
+  arrowLayer.clearLayers();
+  arrowAcc = 0;
+  var segs = pathSegs.length ? pathSegs : (path.length ? [path] : []);
+  var gap = arrowGap();
+  for (var s = 0; s < segs.length; s++) {
+    var seg = segs[s];
+    if (!seg || seg.length < 2) continue;
+    var acc = 0;
+    var last = seg[0];
+    for (var i = 1; i < seg.length; i++) {
+      acc += distM(seg[i - 1], seg[i]);
+      if (acc >= gap) {
+        addArrow(last, seg[i]);
+        acc = 0;
+        last = seg[i];
+      }
+    }
+    addArrow(seg[seg.length - 2], seg[seg.length - 1]);
+  }
+}
+
+function clearMarks() {
+  if (markLayer) markLayer.clearLayers();
+}
+
+function addMark(lat, lng, n, popup, kind) {
+  if (!map || !markLayer) return;
+  var html = (popup || ("点 " + n)).replace(/\n/g, "<br>");
+  var auto = kind === "auto";
+  var icon = L.divIcon({
+    className: "mark-num",
+    html: '<div class="mark-bubble' + (auto ? " mark-auto" : "") + '">' + n + "</div>",
+    iconSize: [24, 24],
+    iconAnchor: [12, 12]
+  });
+  var marker = L.marker([lat, lng], { icon: icon, zIndexOffset: auto ? 500 : 600 });
+  marker.bindPopup(html);
+  marker._spanA = lat;
+  marker._spanN = lng;
+  marker.on("click", function (ev) {
+    if (!spanPick) return;
+    L.DomEvent.stop(ev);
+    try { this.closePopup(); } catch (x) {}
+    try { Android.onMapTap(this._spanA, this._spanN, map.getZoom()); } catch (x) {}
+  });
+  markLayer.addLayer(marker);
+}
+
+function setMarks(json) {
+  clearMarks();
+  var pts = [];
+  try { pts = JSON.parse(json); } catch (e) { pts = []; }
+  for (var i = 0; i < pts.length; i++) {
+    addMark(pts[i].a, pts[i].g, pts[i].i, pts[i].p, pts[i].k);
+  }
+}
+
+function setFollow(v) {
+  follow = !!v;
+}
+
+function setHist(on) {
+  document.documentElement.classList.toggle("hist", !!on);
+}
+
+function setEditPts(on) {
+  editPts = !!on;
+  var hint = document.getElementById("editHint");
+  if (hint) hint.style.display = on ? "block" : "none";
+  if (!on) setDots("[]");
+}
+
+function setSpanPick(on) {
+  spanPick = !!on;
+  var hint = document.getElementById("spanHint");
+  if (hint) hint.style.display = on ? "block" : "none";
+  if (!on) setSpan("null");
+}
+
+function setSpan(json) {
+  if (!spanLayer) return;
+  spanLayer.clearLayers();
+  if (!json || json === "null") return;
+  var o;
+  try { o = JSON.parse(json); } catch (e) { return; }
+  var linePts = o.line || [];
+  var latlngs = [];
+  for (var i = 0; i < linePts.length; i++) {
+    latlngs.push([linePts[i].a, linePts[i].n]);
+  }
+  if (latlngs.length >= 2) {
+    L.polyline(latlngs, { color: "#F59E0B", weight: 8, opacity: 0.9, interactive: false }).addTo(spanLayer);
+  }
+  function pin(p, lab, color) {
+    if (!p) return;
+    L.marker([p.a, p.n], {
+      icon: L.divIcon({
+        className: "mark-num",
+        html: '<div class="span-pin" style="background:' + color + '">' + lab + "</div>",
+        iconSize: [22, 22],
+        iconAnchor: [11, 11]
+      }),
+      zIndexOffset: 900,
+      interactive: false,
+      keyboard: false
+    }).addTo(spanLayer);
+  }
+  pin(o.a, "起", "#0F766E");
+  pin(o.b, "终", "#EA580C");
+}
+
+function hopDotSize(sel) {
+  var z = map ? map.getZoom() : 16;
+  var base = 22;
+  if (z >= 21) base = 12;
+  else if (z >= 19.5) base = 14;
+  else if (z >= 18.5) base = 16;
+  return sel ? base + 4 : base;
+}
+
+function setDots(json) {
+  lastDotsJson = json == null ? "[]" : json;
+  drawDots(lastDotsJson);
+}
+
+function drawDots(json) {
+  if (!dotLayer) return;
+  dotLayer.clearLayers();
+  var pts = [];
+  try { pts = JSON.parse(json); } catch (e) { pts = []; }
+  for (var i = 0; i < pts.length; i++) {
+    var p = pts[i];
+    var hidden = p.k === "hid";
+    var sel = !!p.sel;
+    var lab = p.lab != null ? String(p.lab) : "";
+    var cls = "hop-dot" + (hidden ? " hid" : "") + (sel ? " sel" : "");
+    var size = hopDotSize(sel);
+    var mk = L.marker([p.a, p.n], {
+      icon: L.divIcon({
+        className: "hop-wrap",
+        html: '<div class="' + cls + '" style="width:' + size + 'px;height:' + size + 'px;line-height:' + (size - 4) + 'px;border-radius:' + (size / 2) + 'px;font-size:' + Math.max(8, size - 12) + 'px">' + lab + "</div>",
+        iconSize: [size, size],
+        iconAnchor: [size / 2, size / 2]
+      }),
+      zIndexOffset: sel ? 850 : 700,
+      keyboard: false
+    });
+    mk._tapA = p.a;
+    mk._tapN = p.n;
+    mk.on("click", function (ev) {
+      if (ev.originalEvent) L.DomEvent.stop(ev.originalEvent);
+      try { Android.onMapTap(this._tapA, this._tapN, map.getZoom()); } catch (x) {}
+    });
+    dotLayer.addLayer(mk);
+  }
+}
+
+function setSatellite(on) {
+  if (!map) return;
+  if (on) {
+    if (map.hasLayer(tile)) map.removeLayer(tile);
+    if (!map.hasLayer(sat)) sat.addTo(map);
+  } else {
+    if (map.hasLayer(sat)) map.removeLayer(sat);
+    if (!map.hasLayer(tile)) tile.addTo(map);
+  }
+}
+
+function reportBounds() {
+  if (!map) return;
+  var b = map.getBounds();
+  try {
+    Android.onMapBounds(b.getSouth(), b.getWest(), b.getNorth(), b.getEast(), map.getZoom());
+  } catch (e) {}
+}
+
+document.addEventListener("DOMContentLoaded", boot);
+</script>
+</body>
+</html>

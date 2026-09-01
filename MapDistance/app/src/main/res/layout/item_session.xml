@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:descendantFocusability="blocksDescendants"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:paddingTop="10dp"
+    android:paddingBottom="10dp">
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/item_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#0F172A"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/item_sub"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#64748B"
+            android:textSize="13sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="end"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/item_rename"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:minWidth="0dp"
+            android:text="改名"
+            android:textColor="#0F766E"
+            android:textSize="12sp" />
+
+        <Button
+            android:id="@+id/item_view"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:minWidth="0dp"
+            android:text="查看"
+            android:textColor="#0F766E"
+            android:textSize="12sp" />
+
+        <Button
+            android:id="@+id/item_marks"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:minWidth="0dp"
+            android:text="打点"
+            android:textColor="#D97706"
+            android:textSize="12sp"
+            android:visibility="gone" />
+
+        <Button
+            android:id="@+id/item_delete"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:minWidth="0dp"
+            android:text="删除"
+            android:textColor="#B91C1C"
+            android:textSize="12sp" />
+    </LinearLayout>
+</LinearLayout>

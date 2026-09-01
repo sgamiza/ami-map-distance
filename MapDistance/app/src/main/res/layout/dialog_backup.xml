@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingStart="20dp"
+    android:paddingEnd="20dp"
+    android:paddingTop="16dp"
+    android:paddingBottom="4dp">
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/backup_auto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="自动备份"
+        android:textColor="#0F172A"
+        android:textSize="16sp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:text="覆盖恢复之前先存一份快照；增删改历史后，离开应用时自动存一份（最短间隔 10 分钟）。另外按下面的频率定时检查一次，不用打开应用也会跑。备份是 JSON 轨迹包，和多机同步同一格式。选的文件夹可以和「文件夹同步」共用。"
+        android:textColor="#64748B"
+        android:textSize="12sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:layout_marginTop="4dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="备份频率"
+            android:textColor="#475569"
+            android:textSize="13sp" />
+
+        <Spinner
+            android:id="@+id/backup_period"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/backup_schedule"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="#64748B"
+        android:textSize="12sp" />
+
+    <TextView
+        android:id="@+id/backup_status"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:textColor="#0F172A"
+        android:textSize="13sp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="备份位置"
+        android:textColor="#475569"
+        android:textSize="13sp" />
+
+    <TextView
+        android:id="@+id/backup_location"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#FFFFFF"
+        android:padding="8dp"
+        android:textColor="#0F172A"
+        android:textSize="12sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_backup_folder"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="选择文件夹"
+            android:textSize="12sp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_backup_internal"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="用应用目录"
+            android:textSize="12sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="保留份数"
+            android:textColor="#475569"
+            android:textSize="13sp" />
+
+        <Spinner
+            android:id="@+id/backup_keep"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_backup_now"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="立即备份"
+            android:textSize="12sp" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/backup_list_head"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:textColor="#94A3B8"
+        android:textSize="11sp" />
+
+    <TextView
+        android:id="@+id/backup_empty"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:paddingTop="16dp"
+        android:paddingBottom="16dp"
+        android:text="还没有备份文件"
+        android:textColor="#64748B"
+        android:textSize="13sp"
+        android:visibility="gone" />
+
+    <ListView
+        android:id="@+id/backup_list"
+        android:layout_width="match_parent"
+        android:layout_height="220dp"
+        android:divider="#E2E8F0"
+        android:dividerHeight="1dp" />
+</LinearLayout>

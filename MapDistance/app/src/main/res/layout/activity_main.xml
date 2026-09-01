@@ -1,0 +1,1682 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F1F5F9"
+    android:orientation="vertical">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:title="@string/app_name"
+        app:titleTextColor="#FFFFFF" />
+
+    <com.google.android.material.button.MaterialButtonToggleGroup
+        android:id="@+id/tabs"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="10dp"
+        android:gravity="center"
+        app:checkedButton="@id/tab_measure"
+        app:selectionRequired="true"
+        app:singleSelection="true">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/tab_measure"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:insetLeft="0dp"
+            android:insetRight="0dp"
+            android:minWidth="0dp"
+            android:paddingStart="2dp"
+            android:paddingEnd="2dp"
+            android:text="测量"
+            android:textSize="13sp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/tab_history"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:insetLeft="0dp"
+            android:insetRight="0dp"
+            android:minWidth="0dp"
+            android:paddingStart="2dp"
+            android:paddingEnd="2dp"
+            android:text="历史"
+            android:textSize="13sp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/tab_stats"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:insetLeft="0dp"
+            android:insetRight="0dp"
+            android:minWidth="0dp"
+            android:paddingStart="2dp"
+            android:paddingEnd="2dp"
+            android:text="统计"
+            android:textSize="13sp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/tab_settings"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:insetLeft="0dp"
+            android:insetRight="0dp"
+            android:minWidth="0dp"
+            android:paddingStart="2dp"
+            android:paddingEnd="2dp"
+            android:text="设置"
+            android:textSize="13sp" />
+    </com.google.android.material.button.MaterialButtonToggleGroup>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <!-- 测量 -->
+        <FrameLayout
+            android:id="@+id/pane_measure"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <WebView
+                android:id="@+id/web_map"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_mode"
+                style="@style/Widget.MapDistance.MapChip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="top|start"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:maxLines="1"
+                android:text="走路 ▾" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="top|end"
+                android:orientation="horizontal"
+                android:paddingTop="10dp"
+                android:paddingEnd="10dp">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_span"
+                    style="@style/Widget.MapDistance.MapChip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="6dp"
+                    android:text="量两点" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_satellite"
+                    style="@style/Widget.MapDistance.MapChip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="卫星" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_locate"
+                    style="@style/Widget.MapDistance.MapChip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="6dp"
+                    android:text="定位" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/txt_gps"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="top|end"
+                android:layout_marginTop="52dp"
+                android:layout_marginEnd="10dp"
+                android:background="@drawable/bg_chip"
+                android:paddingStart="10dp"
+                android:paddingTop="4dp"
+                android:paddingEnd="10dp"
+                android:paddingBottom="4dp"
+                android:text="正在定位…"
+                android:textColor="#FFFFFF"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/txt_net"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="top|end"
+                android:layout_marginTop="90dp"
+                android:layout_marginEnd="10dp"
+                android:background="@drawable/bg_chip"
+                android:paddingStart="10dp"
+                android:paddingTop="4dp"
+                android:paddingEnd="10dp"
+                android:paddingBottom="4dp"
+                android:text="离线记录"
+                android:textColor="#FFFFFF"
+                android:textSize="12sp"
+                android:visibility="gone" />
+
+            <LinearLayout
+                android:id="@+id/history_banner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="28dp"
+                android:background="@drawable/bg_chip"
+                android:elevation="10dp"
+                android:orientation="vertical"
+                android:padding="10dp"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/txt_history_banner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:lineSpacingExtra="3dp"
+                    android:maxLines="5"
+                    android:text="历史轨迹"
+                    android:textColor="#FFFFFF"
+                    android:textSize="14sp" />
+
+                <HorizontalScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="6dp"
+                    android:scrollbars="none">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <Button
+                            android:id="@+id/btn_span_hist"
+                            style="?android:attr/borderlessButtonStyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:minWidth="0dp"
+                            android:text="量两点"
+                            android:textColor="#FDE68A"
+                            android:textSize="13sp" />
+
+                        <Button
+                            android:id="@+id/btn_hop_limit"
+                            style="?android:attr/borderlessButtonStyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:minWidth="0dp"
+                            android:text="速度阈值"
+                            android:textColor="#5EEAD4"
+                            android:textSize="13sp" />
+
+                        <Button
+                            android:id="@+id/btn_edit_pts"
+                            style="?android:attr/borderlessButtonStyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:minWidth="0dp"
+                            android:text="去掉点"
+                            android:textColor="#5EEAD4"
+                            android:textSize="13sp" />
+
+                        <Button
+                            android:id="@+id/btn_suspect_pts"
+                            style="?android:attr/borderlessButtonStyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:minWidth="0dp"
+                            android:text="可疑列表"
+                            android:textColor="#FDE68A"
+                            android:textSize="13sp"
+                            android:visibility="gone" />
+
+                        <Button
+                            android:id="@+id/btn_range_pts"
+                            style="?android:attr/borderlessButtonStyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:minWidth="0dp"
+                            android:text="连段去掉"
+                            android:textColor="#FDE68A"
+                            android:textSize="13sp"
+                            android:visibility="gone" />
+
+                        <Button
+                            android:id="@+id/btn_restore_pts"
+                            style="?android:attr/borderlessButtonStyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:minWidth="0dp"
+                            android:text="恢复去掉的"
+                            android:textColor="#A5F3FC"
+                            android:textSize="13sp"
+                            android:visibility="gone" />
+
+                        <Button
+                            android:id="@+id/btn_exit_preview"
+                            style="?android:attr/borderlessButtonStyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:minWidth="0dp"
+                            android:text="返回"
+                            android:textColor="#5EEAD4"
+                            android:textSize="14sp" />
+                    </LinearLayout>
+                </HorizontalScrollView>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/card_stats"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:background="@drawable/bg_card"
+                android:elevation="8dp"
+                android:orientation="vertical"
+                android:padding="14dp">
+
+                <LinearLayout
+                    android:id="@+id/row_stats_fold"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical"
+                    android:paddingTop="2dp"
+                    android:paddingBottom="4dp">
+
+                    <View
+                        android:layout_width="36dp"
+                        android:layout_height="4dp"
+                        android:background="#CBD5E1" />
+
+                    <TextView
+                        android:id="@+id/txt_stats_fold"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:paddingTop="4dp"
+                        android:text="收起，多看地图  ▾"
+                        android:textColor="#0F766E"
+                        android:textSize="13sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/stats_detail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/txt_keepalive_banner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_warn"
+                    android:padding="8dp"
+                    android:text="后台可能被限制"
+                    android:textColor="#B45309"
+                    android:textSize="12sp"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/txt_place"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:paddingTop="6dp"
+                    android:text="点开始即可测量"
+                    android:textColor="#64748B"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/txt_distance"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:paddingTop="4dp"
+                    android:text="0 米"
+                    android:textColor="#0F172A"
+                    android:textSize="34sp"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingTop="4dp"
+                    android:paddingBottom="8dp">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="用时"
+                            android:textColor="#94A3B8"
+                            android:textSize="11sp" />
+
+                        <TextView
+                            android:id="@+id/txt_time"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="00:00"
+                            android:textColor="#0F172A"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/cell_pace"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="?attr/selectableItemBackground"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="每公里"
+                            android:textColor="#94A3B8"
+                            android:textSize="11sp" />
+
+                        <TextView
+                            android:id="@+id/txt_pace"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:maxLines="2"
+                            android:text="--"
+                            android:textColor="#0F172A"
+                            android:textSize="13sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/cell_speed"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="?attr/selectableItemBackground"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="时速"
+                            android:textColor="#94A3B8"
+                            android:textSize="11sp" />
+
+                        <TextView
+                            android:id="@+id/txt_speed"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="0.0 km/h"
+                            android:textColor="#0F172A"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/cell_avg"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="?attr/selectableItemBackground"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="均速"
+                            android:textColor="#94A3B8"
+                            android:textSize="11sp" />
+
+                        <TextView
+                            android:id="@+id/txt_avg"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="0.0 km/h"
+                            android:textColor="#0F172A"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/txt_stride"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center"
+                    android:paddingTop="2dp"
+                    android:paddingBottom="2dp"
+                    android:text="步幅 70 厘米"
+                    android:textColor="#0F766E"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/txt_auto"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#F0FDFA"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center"
+                    android:lineSpacingExtra="3dp"
+                    android:paddingTop="6dp"
+                    android:paddingBottom="6dp"
+                    android:text="自动：有步数算走路，没步数但在动算车程"
+                    android:textColor="#0F766E"
+                    android:textSize="12sp"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/txt_extra"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center"
+                    android:lineSpacingExtra="3dp"
+                    android:maxLines="8"
+                    android:paddingBottom="4dp"
+                    android:text="热量 -- · 最高时速 --"
+                    android:textColor="#64748B"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/txt_marks"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:paddingBottom="8dp"
+                    android:text="测量中点「打点」，记下到这里的距离和用时"
+                    android:textColor="#0F766E"
+                    android:textSize="12sp"
+                    android:visibility="gone" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/btn_mark"
+                        android:layout_width="0dp"
+                        android:layout_height="48dp"
+                        android:layout_weight="1"
+                        android:backgroundTint="#D97706"
+                        android:text="打点"
+                        android:textColor="#FFFFFF"
+                        android:textSize="15sp"
+                        android:visibility="gone" />
+
+                    <Button
+                        android:id="@+id/btn_primary"
+                        android:layout_width="0dp"
+                        android:layout_height="48dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_weight="1"
+                        android:backgroundTint="#0F766E"
+                        android:text="开始"
+                        android:textColor="#FFFFFF"
+                        android:textSize="15sp" />
+
+                    <Button
+                        android:id="@+id/btn_stop"
+                        android:layout_width="0dp"
+                        android:layout_height="48dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_weight="1"
+                        android:backgroundTint="#B91C1C"
+                        android:text="结束"
+                        android:textColor="#FFFFFF"
+                        android:textSize="15sp"
+                        android:visibility="gone" />
+                </LinearLayout>
+            </LinearLayout>
+            </LinearLayout>
+        </FrameLayout>
+
+        <!-- 历史 -->
+        <LinearLayout
+            android:id="@+id/pane_history"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="10dp"
+            android:visibility="gone">
+
+            <EditText
+                android:id="@+id/edit_history_q"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_card"
+                android:hint="搜名称、地点、步数、公里、日期…"
+                android:imeOptions="actionSearch"
+                android:importantForAutofill="no"
+                android:inputType="text"
+                android:maxLines="1"
+                android:padding="10dp"
+                android:textColor="#0F172A"
+                android:textColorHint="#94A3B8"
+                android:textSize="15sp" />
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/sw_hist_clean"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="8dp"
+                android:paddingBottom="2dp"
+                android:text="按实际移动看（去掉飞点和停下）"
+                android:textSize="14sp" />
+
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="8dp"
+                android:scrollbars="none">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/sort_time"
+                        style="@style/Widget.MapDistance.MapChip"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="时间" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/sort_km"
+                        style="@style/Widget.MapDistance.MapChip"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="6dp"
+                        android:text="公里" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/sort_steps"
+                        style="@style/Widget.MapDistance.MapChip"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="6dp"
+                        android:text="步数" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/sort_speed"
+                        style="@style/Widget.MapDistance.MapChip"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="6dp"
+                        android:text="速度" />
+                </LinearLayout>
+            </HorizontalScrollView>
+
+            <TextView
+                android:id="@+id/txt_history_count"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="6dp"
+                android:paddingBottom="4dp"
+                android:text="时间从新到旧"
+                android:textColor="#64748B"
+                android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/txt_history_empty"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="16dp"
+                    android:text="还没有记录。没网也能测：打开测量页走一段再点结束，联网后可以看地图和地点。"
+                    android:textColor="#64748B"
+                    android:textSize="14sp"
+                    android:visibility="gone" />
+
+            <ListView
+                android:id="@+id/list_history"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:divider="#E2E8F0"
+                android:dividerHeight="1dp" />
+        </LinearLayout>
+
+        <!-- 统计 -->
+        <LinearLayout
+            android:id="@+id/pane_stats"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="10dp"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:id="@+id/stats_filter_row"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="筛选"
+                    android:textColor="#64748B"
+                    android:textSize="13sp" />
+
+                <Spinner
+                    android:id="@+id/spinner_stats"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_share_stats"
+                    style="@style/Widget.MaterialComponents.Button.TextButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="分享"
+                    android:textSize="13sp" />
+            </LinearLayout>
+
+            <com.google.android.material.button.MaterialButtonToggleGroup
+                android:id="@+id/stats_kind"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:gravity="center"
+                app:checkedButton="@id/stats_kind_charts"
+                app:selectionRequired="true"
+                app:singleSelection="true">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/stats_kind_cards"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="卡片"
+                    android:textSize="13sp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/stats_kind_charts"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="图表"
+                    android:textSize="13sp" />
+            </com.google.android.material.button.MaterialButtonToggleGroup>
+
+            <TextView
+                android:id="@+id/text_stats_version"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="6dp"
+                android:textColor="#94A3B8"
+                android:textSize="11sp" />
+
+            <TextView
+                android:id="@+id/empty_stats"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingTop="24dp"
+                android:textColor="#64748B"
+                android:visibility="gone" />
+
+            <ScrollView
+                android:id="@+id/scroll_stats"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1">
+
+                <LinearLayout
+                    android:id="@+id/stats_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingBottom="16dp" />
+            </ScrollView>
+
+            <WebView
+                android:id="@+id/web_charts"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:visibility="gone" />
+        </LinearLayout>
+
+        <!-- 设置 -->
+        <ScrollView
+            android:id="@+id/pane_settings"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="14dp"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/sw_autostart"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp"
+                    android:text="打开后自动开始测量"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="默认关。勾上后，同意定位并拿到 GPS 就会开始记轨迹。锁屏、切到别的 App 也会继续，直到你点结束。"
+                    android:textColor="#64748B"
+                    android:textSize="12sp" />
+
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/sw_automark"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="16dp"
+                    android:paddingBottom="8dp"
+                    android:text="测量中自动打点"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="间隔（分钟，1–30）"
+                    android:textColor="#0F172A"
+                    android:textSize="14sp" />
+
+                <EditText
+                    android:id="@+id/edit_automark_min"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="5"
+                    android:inputType="number"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="4dp"
+                    android:text="按测量用时隔这么久打一个，暂停不加。橙色圆点是手动，青色方点是自动。历史列表和点详情里也会分开写。没有定位就等有点再打。手动打点还在，走到地方照常点「打点」。"
+                    android:textColor="#64748B"
+                    android:textSize="12sp" />
+
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/sw_auto_still"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="16dp"
+                    android:paddingBottom="4dp"
+                    android:text="停下就不计时（类似暂停）"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="默认开。站着买菜、等灯大约十几秒（约 8 米内、或 GPS 时速一直是 0），就不再加时间、距离和这次步数。角标「已停下，不计时」。人走出约 12 米再接着。想看墙钟全程就关掉。"
+                    android:textColor="#64748B"
+                    android:textSize="12sp" />
+
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/sw_hist_clean_settings"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="16dp"
+                    android:paddingBottom="4dp"
+                    android:text="历史和统计去掉飞点、停留"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="默认开。不改库里的原始点。列表、查看轨迹、统计按清洗后的距离和用时。GPS 偶尔跳到旁边楼的点会丢掉，停下买菜那段时间也不算进均速。历史页也有同一个开关。关掉就看原始墙钟。"
+                    android:textColor="#64748B"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="16dp"
+                    android:text="到达提醒（这次测量）"
+                    android:textColor="#0F172A"
+                    android:textSize="14sp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/bg_alert_box"
+                    android:orientation="vertical"
+                    android:padding="12dp">
+
+                    <androidx.appcompat.widget.SwitchCompat
+                        android:id="@+id/sw_goal_km"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="① 这次走到多少公里"
+                        android:textSize="15sp" />
+
+                    <EditText
+                        android:id="@+id/edit_goal_km"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="例如 3，空=关"
+                        android:inputType="numberDecimal"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="4dp"
+                        android:text="铃声只给「这次走到多少公里」用，不会改下面的每公里、步数。"
+                        android:textColor="#0F766E"
+                        android:textSize="12sp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <androidx.appcompat.widget.SwitchCompat
+                            android:id="@+id/sw_ring_goal_km"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="这次公里铃声"
+                            android:textSize="13sp" />
+
+                        <androidx.appcompat.widget.SwitchCompat
+                            android:id="@+id/sw_voice_goal_km"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:text="这次公里语音"
+                            android:textSize="13sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/txt_tone_goal_km"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="这次公里 · 未单独选"
+                            android:textColor="#64748B"
+                            android:textSize="12sp" />
+
+                        <Button
+                            android:id="@+id/btn_tone_goal_km"
+                            style="?android:attr/borderlessButtonStyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:minWidth="0dp"
+                            android:text="选这次公里"
+                            android:textColor="#0F766E"
+                            android:textSize="13sp" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/bg_alert_box"
+                    android:orientation="vertical"
+                    android:padding="12dp">
+
+                    <androidx.appcompat.widget.SwitchCompat
+                        android:id="@+id/sw_goal_steps"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="② 这次走到多少步"
+                        android:textSize="15sp" />
+
+                    <EditText
+                        android:id="@+id/edit_goal_steps"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="例如 5000，空=关"
+                        android:inputType="number"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="4dp"
+                        android:text="铃声只给「这次走到多少步」用。"
+                        android:textColor="#0F766E"
+                        android:textSize="12sp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <androidx.appcompat.widget.SwitchCompat
+                            android:id="@+id/sw_ring_goal_steps"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="这次步数铃声"
+                            android:textSize="13sp" />
+
+                        <androidx.appcompat.widget.SwitchCompat
+                            android:id="@+id/sw_voice_goal_steps"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:text="这次步数语音"
+                            android:textSize="13sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/txt_tone_goal_steps"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="这次步数 · 未单独选"
+                            android:textColor="#64748B"
+                            android:textSize="12sp" />
+
+                        <Button
+                            android:id="@+id/btn_tone_goal_steps"
+                            style="?android:attr/borderlessButtonStyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:minWidth="0dp"
+                            android:text="选这次步数"
+                            android:textColor="#0F766E"
+                            android:textSize="13sp" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="16dp"
+                    android:text="间隔提醒（这次测量）"
+                    android:textColor="#0F172A"
+                    android:textSize="14sp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/bg_alert_box"
+                    android:orientation="vertical"
+                    android:padding="12dp">
+
+                    <androidx.appcompat.widget.SwitchCompat
+                        android:id="@+id/sw_every_km"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="③ 每走多少公里提醒一次"
+                        android:textSize="15sp" />
+
+                    <EditText
+                        android:id="@+id/edit_every_km"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="例如 1，空=关"
+                        android:inputType="numberDecimal"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="4dp"
+                        android:text="铃声只给「每走多少公里」用，和上面「这次走到多少公里」不是同一条。"
+                        android:textColor="#0F766E"
+                        android:textSize="12sp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <androidx.appcompat.widget.SwitchCompat
+                            android:id="@+id/sw_ring_every_km"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="每公里铃声"
+                            android:textSize="13sp" />
+
+                        <androidx.appcompat.widget.SwitchCompat
+                            android:id="@+id/sw_voice_every_km"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:text="每公里语音"
+                            android:textSize="13sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/txt_tone_every_km"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="每N公里 · 未单独选"
+                            android:textColor="#64748B"
+                            android:textSize="12sp" />
+
+                        <Button
+                            android:id="@+id/btn_tone_every_km"
+                            style="?android:attr/borderlessButtonStyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:minWidth="0dp"
+                            android:text="选每公里"
+                            android:textColor="#0F766E"
+                            android:textSize="13sp" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/bg_alert_box"
+                    android:orientation="vertical"
+                    android:padding="12dp">
+
+                    <androidx.appcompat.widget.SwitchCompat
+                        android:id="@+id/sw_every_steps"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="④ 每走多少步提醒一次"
+                        android:textSize="15sp" />
+
+                    <EditText
+                        android:id="@+id/edit_every_steps"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="例如 1000，空=关"
+                        android:inputType="number"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="4dp"
+                        android:text="铃声只给「每走多少步」用。"
+                        android:textColor="#0F766E"
+                        android:textSize="12sp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <androidx.appcompat.widget.SwitchCompat
+                            android:id="@+id/sw_ring_every_steps"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="每步铃声"
+                            android:textSize="13sp" />
+
+                        <androidx.appcompat.widget.SwitchCompat
+                            android:id="@+id/sw_voice_every_steps"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:text="每步语音"
+                            android:textSize="13sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/txt_tone_every_steps"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="每N步 · 未单独选"
+                            android:textColor="#64748B"
+                            android:textSize="12sp" />
+
+                        <Button
+                            android:id="@+id/btn_tone_every_steps"
+                            style="?android:attr/borderlessButtonStyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:minWidth="0dp"
+                            android:text="选每步"
+                            android:textColor="#0F766E"
+                            android:textSize="13sp" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="16dp"
+                    android:text="今日步数提醒"
+                    android:textColor="#0F172A"
+                    android:textSize="14sp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/bg_alert_box"
+                    android:orientation="vertical"
+                    android:padding="12dp">
+
+                    <androidx.appcompat.widget.SwitchCompat
+                        android:id="@+id/sw_today_goal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="⑤ 今日芯片步数到多少提醒一次"
+                        android:textSize="15sp" />
+
+                    <EditText
+                        android:id="@+id/edit_today_goal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="例如 8000，空=关"
+                        android:inputType="number"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="4dp"
+                        android:text="铃声只给「今日芯片步数」用，和这次测量的步数不是同一条。"
+                        android:textColor="#0F766E"
+                        android:textSize="12sp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <androidx.appcompat.widget.SwitchCompat
+                            android:id="@+id/sw_ring_today"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="今日步数铃声"
+                            android:textSize="13sp" />
+
+                        <androidx.appcompat.widget.SwitchCompat
+                            android:id="@+id/sw_voice_today"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:text="今日步数语音"
+                            android:textSize="13sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/txt_tone_today"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="今日步数 · 未单独选"
+                            android:textColor="#64748B"
+                            android:textSize="12sp" />
+
+                        <Button
+                            android:id="@+id/btn_tone_today"
+                            style="?android:attr/borderlessButtonStyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:minWidth="0dp"
+                            android:text="选今日步数"
+                            android:textColor="#0F766E"
+                            android:textSize="13sp" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="8dp"
+                    android:text="五项各自一块、各选各的铃声。点「选这次公里 / 选每公里」等按钮，标题会再写一遍是哪一项。先出系统闹钟/通知/来电列表，也可以再选自己的音频。关掉开关后数字还留着。到了弹通知并振动；铃声或语音开着时大约一分钟，点「知道了」立刻停。"
+                    android:textColor="#64748B"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="16dp"
+                    android:text="时速单位"
+                    android:textColor="#0F172A"
+                    android:textSize="14sp" />
+
+                <com.google.android.material.button.MaterialButtonToggleGroup
+                    android:id="@+id/speed_unit_group"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    app:checkedButton="@id/unit_kmh"
+                    app:selectionRequired="true"
+                    app:singleSelection="true">
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/unit_kmh"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:insetTop="0dp"
+                        android:insetBottom="0dp"
+                        android:minWidth="0dp"
+                        android:text="公里/时"
+                        android:textSize="13sp" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/unit_ms"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:insetTop="0dp"
+                        android:insetBottom="0dp"
+                        android:minWidth="0dp"
+                        android:text="米/秒"
+                        android:textSize="13sp" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/unit_mph"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:insetTop="0dp"
+                        android:insetBottom="0dp"
+                        android:minWidth="0dp"
+                        android:text="英里/时"
+                        android:textSize="13sp" />
+                </com.google.android.material.button.MaterialButtonToggleGroup>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="6dp"
+                    android:text="时速、均速、最高时速一起换。配速是走完 1 公里花的时间，例如 11分17秒/公里，约等于 5.3 km/h。点测量页的时速或均速也能切换。"
+                    android:textColor="#64748B"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="16dp"
+                    android:text="步数"
+                    android:textColor="#0F172A"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="6dp"
+                    android:text="用手机自己的计步芯片，不是去读「运动健康」。那边有系统服务 24 小时听着，还可以接手环；这边只能在 App 活着或零点闹钟拍到时对齐累计值。同一天内关掉再打开能补上；零点到第一次打开之前，闹钟被小米拦住就会少一截。戴手环两边会对不上。"
+                    android:textColor="#64748B"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="16dp"
+                    android:text="体重（斤，用来估热量）"
+                    android:textColor="#0F172A"
+                    android:textSize="14sp" />
+
+                <EditText
+                    android:id="@+id/edit_weight"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="例如 130"
+                    android:inputType="numberDecimal"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="16dp"
+                    android:text="丢掉精度差于多少米的点"
+                    android:textColor="#0F172A"
+                    android:textSize="14sp" />
+
+                <EditText
+                    android:id="@+id/edit_accuracy"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="40"
+                    android:inputType="number"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="4dp"
+                    android:text="精度差于这个数的点不画进轨迹。下面两项分开设，互不影响。"
+                    android:textColor="#64748B"
+                    android:textSize="12sp" />
+
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/sw_wait_gps"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="12dp"
+                    android:paddingBottom="4dp"
+                    android:text="开始后等 GPS 合格再记"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="默认开。点了开始，精度还没达到上面这个数时，用时和这次步数先不走。有合格 GPS 才真正开始。关掉就一点开始就记。"
+                    android:textColor="#64748B"
+                    android:textSize="12sp" />
+
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/sw_record_gps_lost"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="12dp"
+                    android:paddingBottom="4dp"
+                    android:text="中途丢星仍记时记步"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="默认开。已经开始记之后大约 8 秒没有合格 GPS：开着则用时和这次步数继续加（距离仍要有点才加）；关掉则这段冻住，有合格 GPS 再接着。和上面「等 GPS 再记」不是同一个开关。"
+                    android:textColor="#64748B"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="16dp"
+                    android:text="高德 Web 服务 Key（逆地理编码，查出街道名）"
+                    android:textColor="#0F172A"
+                    android:textSize="14sp" />
+
+                <EditText
+                    android:id="@+id/edit_key"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="高德控制台的 Web 服务 Key"
+                    android:inputType="textVisiblePassword"
+                    android:textSize="14sp" />
+
+                <Button
+                    android:id="@+id/btn_save_settings"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:backgroundTint="#0F766E"
+                    android:text="保存设置"
+                    android:textColor="#FFFFFF" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="20dp"
+                    android:text="锁屏后台"
+                    android:textColor="#0F172A"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/txt_keepalive"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:lineSpacingExtra="3dp"
+                    android:paddingTop="6dp"
+                    android:text="打开后会自动查本机有没有限制后台。"
+                    android:textColor="#0F172A"
+                    android:textSize="13sp" />
+
+                <Button
+                    android:id="@+id/btn_battery"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="去放开电池优化" />
+
+                <Button
+                    android:id="@+id/btn_autostart_sys"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="去打开自启动"
+                    android:visibility="gone" />
+
+                <Button
+                    android:id="@+id/btn_oem"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="去设省电策略"
+                    android:visibility="gone" />
+
+                <Button
+                    android:id="@+id/btn_keepalive_done"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="厂商那几项我已设好"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="6dp"
+                    android:text="安装时系统不会告诉 App 有没有被限制，所以每次打开都会自己查。小米能读出自启动；华为的应用启动管理读不到，要你点进系统页看一眼。"
+                    android:textColor="#64748B"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="20dp"
+                    android:text="备份与恢复"
+                    android:textColor="#0F172A"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="6dp"
+                    android:text="历史轨迹可自动做成快照。选共享文件夹后，备份和「文件夹同步」能用同一目录。点开可立即备份、改保留份数，或从某份覆盖恢复。"
+                    android:textColor="#64748B"
+                    android:textSize="12sp" />
+
+                <Button
+                    android:id="@+id/btn_backup"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:backgroundTint="#0F766E"
+                    android:text="备份与恢复"
+                    android:textColor="#FFFFFF" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="20dp"
+                    android:text="多机同步"
+                    android:textColor="#0F172A"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/txt_sync"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:lineSpacingExtra="3dp"
+                    android:paddingTop="6dp"
+                    android:text="同一 WiFi 或蓝牙，两台手机都打开附近同步即可。"
+                    android:textColor="#0F172A"
+                    android:textSize="13sp" />
+
+                <Button
+                    android:id="@+id/btn_nearby_sync"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:backgroundTint="#0F766E"
+                    android:text="附近同步"
+                    android:textColor="#FFFFFF" />
+
+                <Button
+                    android:id="@+id/btn_sync_folder"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="选同步文件夹（备选）" />
+
+                <Button
+                    android:id="@+id/btn_folder_sync_now"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="文件夹同步" />
+
+                <Button
+                    android:id="@+id/btn_sync_help"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="多机同步说明" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="6dp"
+                    android:text="推荐附近同步：不用账号、不走公网。对话框关掉就停止等待。进行中的测量不会传，只同步已保存的记录。"
+                    android:textColor="#64748B"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/txt_cache"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="20dp"
+                    android:text="还没缓存地图"
+                    android:textColor="#0F172A"
+                    android:textSize="14sp" />
+
+                <Button
+                    android:id="@+id/btn_download_map"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:backgroundTint="#0F766E"
+                    android:text="下载离线地图"
+                    android:textColor="#FFFFFF" />
+
+                <Button
+                    android:id="@+id/btn_clear_tiles"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="清空离线地图缓存" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="6dp"
+                    android:text="出发前联网下载当前位置附近的高德底图，路上没网也能看地图。1 公里适合走路，3 公里适合跑步，8 公里适合骑车。"
+                    android:textColor="#64748B"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="16dp"
+                    android:text="轨迹用系统 GPS，没网也能记距离和用时。出发前可在上面下载离线地图。街道名仍要联网后才补。位置只存在这台手机。"
+                    android:textColor="#64748B"
+                    android:textSize="12sp" />
+            </LinearLayout>
+        </ScrollView>
+    </FrameLayout>
+</LinearLayout>
